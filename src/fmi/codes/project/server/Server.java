@@ -89,20 +89,17 @@ public class Server implements Runnable {
                             ServerResponseBuilder serverResponseBuilder = null;
 
                             try {
-                                serverResponseBuilder = commandExecutor
-                                        .execute(CommandParser.parseCommand(loggedInUsers.get(key), clientInput))
-                                        .setResponseStatus(ResponseStatus.OK);
-                            } catch (Exception | NoSuchArgumentException | NoSuchUserException |
-                                     UserAlreadyLoggedInException | InvalidPasswordException |
-                                     InvalidUsernameException | WrongPasswordException | WeakPasswordException |
-                                     UsernameAlreadyUsedException | InvalidCommandSyntaxException e) {
-                                serverResponseBuilder = new ServerResponseBuilder()
-                                        .setResponseStatus(ResponseStatus.ERROR)
+                                serverResponseBuilder = commandExecutor.execute(
+                                        CommandParser.parseCommand(loggedInUsers.get(key), clientInput))
+                                    .setResponseStatus(ResponseStatus.OK);
+                            } catch (Exception e) {
+                                serverResponseBuilder =
+                                    new ServerResponseBuilder().setResponseStatus(ResponseStatus.ERROR)
                                         .setMessage(e.getMessage());
                             }
 
                             if (serverResponseBuilder.getCommandType() == CommandType.LOGIN &&
-                                    serverResponseBuilder.getResponseStatus() == ResponseStatus.OK) {
+                                serverResponseBuilder.getResponseStatus() == ResponseStatus.OK) {
                                 loggedInUsers.put(key, serverResponseBuilder.getClientUsername());
                             }
 

@@ -34,36 +34,36 @@ public class DistributorServerStorage {
     }
 
     public ServerResponseBuilder loginUser(final String username, final String password)
-            throws InvalidUsernameException, InvalidPasswordException, NoSuchUserException,
-            WrongPasswordException, UserAlreadyLoggedInException {
+        throws InvalidUsernameException, InvalidPasswordException, NoSuchUserException, WrongPasswordException,
+        UserAlreadyLoggedInException {
 
-            if (!UserInfo.isUsernameValid(username)) {
-                throw new InvalidUsernameException();
-            }
+        if (!UserInfo.isUsernameValid(username)) {
+            throw new InvalidUsernameException();
+        }
 
-            if (!isPasswordStrong(password)) {
-                throw new InvalidPasswordException();
-            }
+        if (!isPasswordStrong(password)) {
+            throw new InvalidPasswordException();
+        }
 
-            if (!registeredUsers.containsKey(username)) {
-                throw new NoSuchUserException();
-            }
+        if (!registeredUsers.containsKey(username)) {
+            throw new NoSuchUserException();
+        }
 
-            if (!registeredUsers.get(username).isEnteredPasswordCorrect(password)) {
-                throw new WrongPasswordException();
-            }
+        if (!registeredUsers.get(username).isEnteredPasswordCorrect(password)) {
+            throw new WrongPasswordException();
+        }
 
-            if (loggedInUsers.contains(username)) {
-                throw new UserAlreadyLoggedInException();
-            }
+        if (loggedInUsers.contains(username)) {
+            throw new UserAlreadyLoggedInException();
+        }
 
-            loggedInUsers.add(username);
+        loggedInUsers.add(username);
 
-            return new ServerResponseBuilder().setMessage("Successfully logged in user").setClientUsername(username);
+        return new ServerResponseBuilder().setMessage("Successfully logged in user").setClientUsername(username);
     }
 
     public ServerResponseBuilder registerUser(final String username, final String password)
-            throws UsernameAlreadyUsedException, WeakPasswordException, InvalidUsernameException {
+        throws UsernameAlreadyUsedException, WeakPasswordException, InvalidUsernameException {
 
         if (registeredUsers.containsKey(username)) {
             throw new UsernameAlreadyUsedException();
@@ -81,13 +81,14 @@ public class DistributorServerStorage {
 
         registeredUsers.put(username, toSave);
 
-        writeToFile(new PathBuilder().addDirectory(USERS).buildFilePath(), CommandParser.toJson(toSave), StandardOpenOption.APPEND);
+        writeToFile(new PathBuilder().addDirectory(USERS).buildFilePath(), CommandParser.toJson(toSave),
+            StandardOpenOption.APPEND);
 
         return new ServerResponseBuilder().setMessage("Successfully registered user");
     }
 
     public ServerResponseBuilder createMap(final String username, final String quizToAddStringFormat)
-            throws MapAlreadyExistsException {
+        throws MapAlreadyExistsException {
         Path userMapsFile = new PathBuilder().addDirectory(username).addDirectory(PRIVATE_MAPS).buildFilePath();
 
         if (!doesFileOrDirExist(userMapsFile)) {
@@ -103,7 +104,6 @@ public class DistributorServerStorage {
 
         return new ServerResponseBuilder().setMessage("Successfully created map");
     }
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ public class DistributorServerStorage {
             List<String> allLines = Files.lines(usersFilePath).toList();
             Map<String, UserInfo> toReturn = new ConcurrentHashMap<>();
 
-            for(String line : allLines) {
+            for (String line : allLines) {
                 UserInfo toAdd = CommandParser.fromJson(line, UserInfo.class);
                 toReturn.put(toAdd.getUsername(), toAdd);
             }
@@ -136,8 +136,8 @@ public class DistributorServerStorage {
     }
 
     private boolean doesFileContainLine(final Path pathToFile, final String toCheck) {
-        for(String line : getFileContents(pathToFile)) {
-            if(line.equals(toCheck)) {
+        for (String line : getFileContents(pathToFile)) {
+            if (line.equals(toCheck)) {
                 return true;
             }
         }
@@ -175,17 +175,15 @@ public class DistributorServerStorage {
 
     private void writeToFile(Path pathToFile, String stringToWrite, StandardOpenOption... openOptions) {
         try {
-            Files.writeString(pathToFile,
-                    stringToWrite + System.lineSeparator(),
-                    StandardCharsets.UTF_8,
-                    openOptions);
+            Files.writeString(pathToFile, stringToWrite + System.lineSeparator(), StandardCharsets.UTF_8, openOptions);
         } catch (IOException e) {
-            throw new RuntimeException(String
-                    .format(IOUnsuccessfulOperationException.DEFAULT_MESSAGE_FORMAT, e.getMessage()), e);
+            throw new RuntimeException(
+                String.format(IOUnsuccessfulOperationException.DEFAULT_MESSAGE_FORMAT, e.getMessage()), e);
         }
     }
 
     private boolean isPasswordStrong(final String password) {
-        return password != null && !password.isEmpty() && !password.isBlank() && password.length() >= MIN_PASSWORD_LENGTH;
+        return password != null && !password.isEmpty() && !password.isBlank() &&
+            password.length() >= MIN_PASSWORD_LENGTH;
     }
 }

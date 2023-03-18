@@ -1,6 +1,6 @@
 package fmi.codes.project.exception;
 
-public class WrongPasswordException extends Throwable {
+public class WrongPasswordException extends RuntimeException {
 
     private static final String DEFAULT_MESSAGE = "Password does not match";
 
@@ -10,6 +10,10 @@ public class WrongPasswordException extends Throwable {
 
     public WrongPasswordException(String message) {
         super(message);
+    }
+
+    public WrongPasswordException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

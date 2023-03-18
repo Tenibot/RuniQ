@@ -1,6 +1,6 @@
 package fmi.codes.project.exception;
 
-public class UsernameAlreadyUsedException extends Throwable {
+public class UsernameAlreadyUsedException extends RuntimeException {
 
     private static final String DEFAULT_MESSAGE = "Username already used";
 
@@ -8,7 +8,11 @@ public class UsernameAlreadyUsedException extends Throwable {
         this(DEFAULT_MESSAGE);
     }
 
-    public UsernameAlreadyUsedException(final String message) {
+    public UsernameAlreadyUsedException(String message) {
         super(message);
+    }
+
+    public UsernameAlreadyUsedException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

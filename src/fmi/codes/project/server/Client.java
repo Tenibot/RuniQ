@@ -26,8 +26,7 @@ public class Client extends Thread {
     }
 
     public void start() {
-        try (SocketChannel socketChannel = SocketChannel.open();
-             Scanner scanner = new Scanner(System.in)) {
+        try (SocketChannel socketChannel = SocketChannel.open(); Scanner scanner = new Scanner(System.in)) {
 
             buffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
             socketChannel.connect(new InetSocketAddress(HOST, port));

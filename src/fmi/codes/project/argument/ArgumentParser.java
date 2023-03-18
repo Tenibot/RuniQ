@@ -11,12 +11,12 @@ public class ArgumentParser {
     private static final int SECOND_ARGUMENT = 1;
 
     public static String parseStringValue(List<String> arguments, String argumentName, boolean isOptional)
-            throws NoSuchArgumentException {
+        throws NoSuchArgumentException {
 
         if (arguments == null) {
             if (!isOptional) {
                 throw new NoSuchArgumentException(String
-                        .format(NoSuchArgumentException.DEFAULT_MESSAGE_FORMAT, argumentName));
+                    .format(NoSuchArgumentException.DEFAULT_MESSAGE_FORMAT, argumentName));
             }
 
             return null;
@@ -32,7 +32,7 @@ public class ArgumentParser {
 
         if (!isOptional) {
             throw new NoSuchArgumentException(String
-                    .format(NoSuchArgumentException.DEFAULT_MESSAGE_FORMAT, argumentName));
+                .format(NoSuchArgumentException.DEFAULT_MESSAGE_FORMAT, argumentName));
         }
 
         return null;
@@ -40,8 +40,8 @@ public class ArgumentParser {
 
     public static String[] trimAll(String[] toTrim) {
         return Arrays
-                .stream(toTrim)
-                .map(String::trim)
-                .toArray(String[]::new);
+            .stream(toTrim)
+            .map(String::trim)
+            .toArray(String[]::new);
     }
 }

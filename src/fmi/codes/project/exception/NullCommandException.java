@@ -1,6 +1,6 @@
 package fmi.codes.project.exception;
 
-public class NullCommandException extends Throwable {
+public class NullCommandException extends RuntimeException {
 
     private static final String DEFAULT_MESSAGE = "Command is null";
 
@@ -8,7 +8,11 @@ public class NullCommandException extends Throwable {
         this(DEFAULT_MESSAGE);
     }
 
-    public NullCommandException(final String message) {
+    public NullCommandException(String message) {
         super(message);
+    }
+
+    public NullCommandException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

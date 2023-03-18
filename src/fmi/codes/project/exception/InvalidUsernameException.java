@@ -1,6 +1,6 @@
 package fmi.codes.project.exception;
 
-public class InvalidUsernameException extends Throwable {
+public class InvalidUsernameException extends RuntimeException {
 
     private static final String DEFAULT_MESSAGE = "Username is invalid";
 
@@ -8,7 +8,13 @@ public class InvalidUsernameException extends Throwable {
         this(DEFAULT_MESSAGE);
     }
 
-    public InvalidUsernameException(final String message) {
+    public InvalidUsernameException(String message) {
         super(message);
     }
+
+    public InvalidUsernameException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+
 }

@@ -23,51 +23,50 @@ public class CommandExecutor {
         this.quizTeams = new HashMap<>();
     }
 
-    public ServerResponseBuilder execute(final Command toExecute) throws Exception, NoSuchArgumentException,
-            NoSuchUserException, UserAlreadyLoggedInException, InvalidPasswordException, InvalidUsernameException,
-            WrongPasswordException, WeakPasswordException, UsernameAlreadyUsedException {
+    public ServerResponseBuilder execute(final Command toExecute) {
 
         if (toExecute == null) {
-            throw new Exception();
+            throw new NullCommandException();
         }
 
         if (toExecute.username() == null) {
             switch (toExecute.commandType()) {
-                case LOGIN: return loginUser(toExecute.arguments());
-                case REGISTER: return registerUser(toExecute.arguments());
-            };
+                case LOGIN:
+                    return loginUser(toExecute.arguments());
+                case REGISTER:
+                    return registerUser(toExecute.arguments());
+            }
+
         } else {
             switch (toExecute.commandType()) {
-                case CREATE_TEAM: return createTeam(toExecute.username(), toExecute.arguments());
-            };
+                case CREATE_TEAM:
+                    return createTeam(toExecute.username(), toExecute.arguments());
+            }
         }
 
         return new ServerResponseBuilder().setMessage("Why are we here");
     }
 
-    private ServerResponseBuilder loginUser(final List<String> arguments)
-            throws NoSuchArgumentException, NoSuchUserException, UserAlreadyLoggedInException,
-            InvalidPasswordException, InvalidUsernameException, WrongPasswordException {
+    private ServerResponseBuilder loginUser(final List<String> arguments) {
         String username = ArgumentParser.parseStringValue(arguments, ArgumentType.USERNAME.getArgumentName(), false);
         String password = ArgumentParser.parseStringValue(arguments, ArgumentType.PASSWORD.getArgumentName(), false);
 
         return serverStorage.loginUser(username, password);
     }
 
-    private ServerResponseBuilder registerUser(final List<String> arguments)
-            throws NoSuchArgumentException, InvalidUsernameException,
-            WeakPasswordException, UsernameAlreadyUsedException {
+    private ServerResponseBuilder registerUser(final List<String> arguments) {
         String username = ArgumentParser.parseStringValue(arguments, ArgumentType.USERNAME.getArgumentName(), false);
         String password = ArgumentParser.parseStringValue(arguments, ArgumentType.PASSWORD.getArgumentName(), false);
 
         return serverStorage.registerUser(username, password);
     }
 
-    private ServerResponseBuilder createTeam(final String username, final List<String> arguments)
-            throws NoSuchArgumentException {
+    private ServerResponseBuilder createTeam(final String username, final List<String> arguments) {
 
-        String teamStringFormat = ArgumentParser.parseStringValue(arguments, ArgumentType.TEAM.getArgumentName(), false);
-        String quizIdStringFormat = ArgumentParser.parseStringValue(arguments, ArgumentType.QUIZ_ID.getArgumentName(), false);
+        String teamStringFormat =
+            ArgumentParser.parseStringValue(arguments, ArgumentType.TEAM.getArgumentName(), false);
+        String quizIdStringFormat =
+            ArgumentParser.parseStringValue(arguments, ArgumentType.QUIZ_ID.getArgumentName(), false);
 
         Team teamToAdd = CommandParser.fromJson(teamStringFormat, Team.class);
         Integer quizId = Integer.valueOf(quizIdStringFormat);
@@ -85,9 +84,9 @@ public class CommandExecutor {
 
     //private ServerResponseBuilder finishTask()
 
-    private ServerResponseBuilder updateLeaderboard(final String username, final List<String> arguments)
-            throws NoSuchArgumentException {
-        String quizIdStringFormat = ArgumentParser.parseStringValue(arguments, ArgumentType.QUIZ_ID.getArgumentName(), false);
+    private ServerResponseBuilder updateLeaderboard(final String username, final List<String> arguments) {
+        String quizIdStringFormat =
+            ArgumentParser.parseStringValue(arguments, ArgumentType.QUIZ_ID.getArgumentName(), false);
 
         Integer quizId = Integer.valueOf(quizIdStringFormat);
 

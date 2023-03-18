@@ -17,10 +17,7 @@ public class DistributorCommandExecutor {
         this.distributorServerStorage = distributorServerStorage;
     }
 
-    public ServerResponseBuilder execute(final Command toExecute)
-            throws NullCommandException, InaccessibleCommandException, NoSuchArgumentException, NoSuchUserException,
-            UserAlreadyLoggedInException, InvalidPasswordException, InvalidUsernameException, WrongPasswordException,
-            WeakPasswordException, UsernameAlreadyUsedException, MapAlreadyExistsException {
+    public ServerResponseBuilder execute(final Command toExecute) {
 
         if (toExecute == null) {
             throw new NullCommandException();
@@ -32,6 +29,7 @@ public class DistributorCommandExecutor {
             serverResponseBuilder = switch (toExecute.commandType()) {
                 case LOGIN -> loginUser(toExecute.arguments());
                 case REGISTER -> registerUser(toExecute.arguments());
+
                 default -> throw new InaccessibleCommandException();
             };
         } else {
@@ -46,28 +44,24 @@ public class DistributorCommandExecutor {
         return serverResponseBuilder.setResponseStatus(ResponseStatus.OK);
     }
 
-    private ServerResponseBuilder loginUser(final List<String> arguments)
-            throws NoSuchArgumentException, NoSuchUserException, UserAlreadyLoggedInException,
-            InvalidPasswordException, InvalidUsernameException, WrongPasswordException {
+    private ServerResponseBuilder loginUser(final List<String> arguments) {
         String username = ArgumentParser.parseStringValue(arguments, ArgumentType.USERNAME.getArgumentName(), false);
         String password = ArgumentParser.parseStringValue(arguments, ArgumentType.PASSWORD.getArgumentName(), false);
 
         return distributorServerStorage.loginUser(username, password);
     }
 
-    private ServerResponseBuilder registerUser(final List<String> arguments)
-            throws NoSuchArgumentException, InvalidUsernameException, WeakPasswordException,
-            UsernameAlreadyUsedException {
+    private ServerResponseBuilder registerUser(final List<String> arguments) {
         String username = ArgumentParser.parseStringValue(arguments, ArgumentType.USERNAME.getArgumentName(), false);
         String password = ArgumentParser.parseStringValue(arguments, ArgumentType.PASSWORD.getArgumentName(), false);
 
         return distributorServerStorage.registerUser(username, password);
     }
 
-    private ServerResponseBuilder createMap(final String username, final List<String> arguments)
-            throws NoSuchArgumentException, MapAlreadyExistsException {
+    private ServerResponseBuilder createMap(final String username, final List<String> arguments) {
 
-        String quizStringFormat = ArgumentParser.parseStringValue(arguments, ArgumentType.QUIZ.getArgumentName(), false);
+        String quizStringFormat =
+            ArgumentParser.parseStringValue(arguments, ArgumentType.QUIZ.getArgumentName(), false);
 
         return distributorServerStorage.createMap(username, quizStringFormat);
     }

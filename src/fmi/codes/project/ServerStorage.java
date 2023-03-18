@@ -4,7 +4,7 @@ import fmi.codes.project.command.CommandParser;
 import fmi.codes.project.exception.*;
 import fmi.codes.project.path.PathBuilder;
 import fmi.codes.project.response.ServerResponseBuilder;
-import fmi.codes.project.task.Task;
+import fmi.codes.project.quiz.Task;
 import fmi.codes.project.user.UserInfo;
 
 import java.io.IOException;

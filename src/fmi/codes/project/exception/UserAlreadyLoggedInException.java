@@ -1,6 +1,6 @@
 package fmi.codes.project.exception;
 
-public class UserAlreadyLoggedInException extends Throwable {
+public class UserAlreadyLoggedInException extends RuntimeException {
 
     private static final String DEFAULT_MESSAGE = "User already logged in";
 
